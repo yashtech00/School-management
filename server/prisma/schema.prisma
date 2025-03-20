@@ -13,10 +13,14 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Students{
-  id Int @default(autoincrement())
-  Rgistration_number String @unique
-  Name String
-  Class String
+model Students {
+  id                 Int     @default(autoincrement())
+  Rgistration_number String  @unique
+  Name               String
+  Class              String
+  Roll_No            Int
+  contact_number     String
+  Status             Boolean @default(true)
 
+  @@unique([Class, Roll_No])
 }
