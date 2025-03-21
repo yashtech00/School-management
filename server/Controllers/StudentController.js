@@ -1,5 +1,4 @@
 import prisma from "../lib/db.js";
-import { StudentValidation } from "../Middlewares/StudentMiddleware.js";
 
 export const CreateStudents = async (req, res) => {
 
@@ -18,7 +17,10 @@ export const CreateStudents = async (req, res) => {
         contact_number,
       },
     });
-    return res.status(200).json("Student data created successfully", students);
+    return res.status(200).json({
+      message: "Student data created successfully",
+      student:students
+    })
   } catch (e) {
     console.error(e);
     return res.status(500).json("internal server error");
@@ -41,7 +43,10 @@ export const GetAllStudents = async (req, res) => {
         }
       })
 
-    return res.status(200).json("Student data created successfully", students);
+    return res.status(200).json({
+      message: "Students data fetch successfully",
+      student:students
+    })
   } catch (e) {
     console.error(e);
     return res.status(500).json("internal server error");
@@ -63,7 +68,10 @@ export const GetStudentsRegNo = async (req, res) => {
       if (!students || students.status) {
           return res.status(404).json("student not found or inactive")
       }
-    return res.status(200).json("Student data created successfully", students);
+    return res.status(200).json({
+      message: "Student data fetch successfully",
+      student:students
+    })
   } catch (e) {
     console.error(e);
     return res.status(500).json("internal server error");
@@ -78,7 +86,7 @@ export const UpdateStudent = async (req, res) => {
   try { 
       const student = await prisma.students.findUnique({
           where: {
-              id:Id
+            Registration_number:regNo
           }
       })
 
@@ -111,7 +119,10 @@ export const UpdateStudent = async (req, res) => {
         contact_number,
       },
     });
-    return res.status(200).json("Student data Updated successfully", UpdateStudents);
+    return res.status(200).json({
+      message: "Student data updated successfully",
+      student:UpdateStudents
+    })
   } catch (e) {
     console.error(e);
     return res.status(500).json("internal server error");
@@ -144,7 +155,10 @@ export const DeleteStudent = async (req, res) => {
               Status:false
           }
       });
-      return res.status(200).json("Student data deleted successfully", students);
+      return res.status(200).json({
+        message: "Student data deleted successfully",
+        student:students
+      })
     } catch (e) {
       console.error(e);
       return res.status(500).json("internal server error");
