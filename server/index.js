@@ -1,6 +1,7 @@
-const express = require("express");
+import express, { json } from "express";
 const app = express();
-const cors = require("cors");
+import cors from "cors";
+import studentRoutes from "./routes/studentRoutes.js"
 
 const PORT = process.env.PORT || 8000
 
@@ -11,7 +12,7 @@ app.use(cors());
 app.use(express.json());
 
 
-app.use("/api/students",StudentRoutes);
+app.use("/students",studentRoutes);
 
 
 app.listen("PORT", () => {

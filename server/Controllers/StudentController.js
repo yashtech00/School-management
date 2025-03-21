@@ -1,20 +1,22 @@
 import prisma from "../lib/db";
+import { StudentValidation } from "../Middlewares/StudentMiddleware";
 
-const CreateStudents = async (req, res) => {
-  try {
+export const CreateStudents = async (req, res) => {
+
     const Student_data_Validation = StudentValidation.safeParse(req.body());
 
     if (!Student_data_Validation) {
       return res.status(401).json("Wrong Student details");
     }
 
+  try {
+   
     const {
       Registration_number,
       Name,
       Class,
       Roll_No,
       contact_number,
-      Status,
     } = Student_data_Validation.data;
 
     const students = await prisma.students.create({
@@ -24,7 +26,6 @@ const CreateStudents = async (req, res) => {
         Class,
         Roll_No,
         contact_number,
-        Status,
       },
     });
     return res.status(200).json("Student data created successfully", students);
@@ -34,43 +35,44 @@ const CreateStudents = async (req, res) => {
   }
 };
 
-const GetAllStudents = async (req, res) => {
-  const page = parseInt(req.query.page) || 1;
-  const limit = parseInt(req.query.limit) || 10;
+//get all students
+export const GetAllStudents = async (req, res) => {
+    const { page = 1, limit = 10 } = req.query;
+    const take = parseInt(limit);
+    const skip = (page - 1) * take;
 
   try {
-    const startIndex = (page - 1) * limit;
-    const totalItems = await students.countDocuments();
-    const items = await students.find().skip(startIndex).limit(limit);
-    const students = await prisma.students.findMany();
+    
+      const students = await prisma.students.findMany({
+        skip,
+        take,
+        where: {
+            Status:true
+        }
+      })
 
-    return res.status(200).json("Student data created successfully", students, {
-      items,
-      currentPage: page,
-      totalPage: Math.ceil(totalItems / limit),
-      totalItems,
-    });
+    return res.status(200).json("Student data created successfully", students);
   } catch (e) {
     console.error(e);
     return res.status(500).json("internal server error");
   }
 };
 
-const GetStudentsRegNo = async (req, res) => {
+// get student by registration number
+
+export const GetStudentsRegNo = async (req, res) => {
+
+    const { regNo } = req.params;
   try {
-    const url = new URL(req.url);
-    const searchParams = new URLSearchParams(url.search);
-      const regNo = searchParams.get("id");
-      
-      if (!regNo) {
-          return res.status(401).json("wrong registration Number")
-      }
 
     const students = await prisma.students.findUnique({
       where: {
-        id: regNo,
+        Registration_number: regNo,
       },
     });
+      if (!students || students.status) {
+          return res.status(404).json("student not found or inactive")
+      }
     return res.status(200).json("Student data created successfully", students);
   } catch (e) {
     console.error(e);
@@ -78,17 +80,12 @@ const GetStudentsRegNo = async (req, res) => {
   }
 };
 
-const UpdateStudent = async (req, res) => {
-  try {
-    
-      const url = new URL(req.url);
-      const searchParams = new URLSearchParams(url.search);
-      const Id = searchParams.get("Id");
+//update student
+export const UpdateStudent = async (req, res) => {
+    const { regNo } = req.params;
+    const { Name, Roll_No, Class, contact_number } = req.body;
 
-    if (!Id) {
-      return res.status(401).json("Student Id does not exist");
-      }
-      
+  try { 
       const student = await prisma.students.findUnique({
           where: {
               id:Id
@@ -96,29 +93,35 @@ const UpdateStudent = async (req, res) => {
       })
 
       if (!student) {
-          return res.status(404).json("student data is unavailable")
+          return res.status(404).json("student detail does not exist")
       }
 
-    const {
-      Registration_number,
-      Name,
-      Class,
-      Roll_No,
-      contact_number,
-      Status,
-    } = Student_data_Validation.data;
+      if (Roll_No && Roll_No !== student.Roll_No) {
+          const existingRoll = await prisma.students.findFirst({
+              where: {
+                  Roll_No,
+                  Class,
+                  Status:true,
+              }
+          })
+          if (existingRoll) {
+              return res.status(400).json("Roll no does not exist for this class");
+          }
+      }
 
-    const students = await prisma.students.update({
+
+      const UpdateStudents = await prisma.students.update({
+          where: {
+            Registration_number:regNo
+        },
       data: {
-        Registration_number,
         Name,
         Class,
         Roll_No,
         contact_number,
-        Status,
       },
     });
-    return res.status(200).json("Student data Updated successfully", students);
+    return res.status(200).json("Student data Updated successfully", UpdateStudents);
   } catch (e) {
     console.error(e);
     return res.status(500).json("internal server error");
@@ -126,14 +129,19 @@ const UpdateStudent = async (req, res) => {
 };
 
 
-const DeleteStudent = async (req, res) => {
+
+//delete student (soft delete)
+export const DeleteStudent = async (req, res) => {
+
+    const { regNo } = req.params;
     try {
-      
-        const url = new URL(req.url);
-        const searchParams = new URLSearchParams(url.search);
-        const regNo = searchParams.get("Id");
-  
-      if (!Id) {
+        const student = await prisma.students.findUnique({
+            where: {
+                Registration_number:regNo
+            }
+        })
+
+      if (!student) {
         return res.status(401).json("Student detail does not exist");
         }
         
@@ -153,10 +161,3 @@ const DeleteStudent = async (req, res) => {
     }
 };
   
-module.exports = {
-    CreateStudents,
-    GetAllStudents,
-    GetStudentsRegNo,
-    UpdateStudent,
-    DeleteStudent,
-}
