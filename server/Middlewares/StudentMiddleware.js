@@ -1,4 +1,4 @@
-const z = require('zod');
+import z from 'zod'
 
 export const StudentValidation = z.object({
     Registration_No: z.string(),

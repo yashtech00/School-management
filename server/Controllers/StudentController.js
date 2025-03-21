@@ -1,5 +1,5 @@
-import prisma from "../lib/db";
-import { StudentValidation } from "../Middlewares/StudentMiddleware";
+import prisma from "../lib/db.js";
+import { StudentValidation } from "../Middlewares/StudentMiddleware.js";
 
 export const CreateStudents = async (req, res) => {
 

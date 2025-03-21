@@ -1,20 +1,21 @@
-import express, { json } from "express";
-const app = express();
-import cors from "cors";
-import studentRoutes from "./routes/studentRoutes.js"
+import 'dotenv/config';  // Standard practice for importing .env configuration  
+import express from 'express';   
+import cors from 'cors';   
+import studentRoutes from './routes/studentRoutes.js';   
 
-const PORT = process.env.PORT || 8000
+const app = express();   
+const PORT = process.env.PORT || 8000;   
 
-//cors Middleware used ensuring cross domain communication
-app.use(cors());
+// CORS middleware to allow cross-domain communication   
+app.use(cors());   
 
-//express.json is also a middleware used to parse the incoming request
-app.use(express.json());
+// Middleware to parse incoming JSON requests   
+app.use(express.json());   
 
+// Register student routes   
+app.use('/students', studentRoutes);  
 
-app.use("/students",studentRoutes);
-
-
-app.listen("PORT", () => {
-    console.log(`Server is running on Port ${PORT}`) 
-})
+// Start the server   
+app.listen(PORT, () => {   
+    console.log(`Server is running on Port ${PORT}`);   
+});  

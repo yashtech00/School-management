@@ -6,13 +6,13 @@ import {
   GetAllStudents,
   GetStudentsRegNo,
   UpdateStudent,
-} from "../Controllers/StudentController";
+} from "../Controllers/StudentController.js";
 
 const router = express.Router();
 
 router.post("/", CreateStudents);
 router.get("/", GetAllStudents);
-router.get(`/:regNo`, GetStudentsRegNo);
+router.get('/:regNo', GetStudentsRegNo);
 router.put("/:regNo", UpdateStudent);
 router.delete("/:regNo", DeleteStudent);
 
