@@ -3,22 +3,12 @@ import { StudentValidation } from "../Middlewares/StudentMiddleware.js";
 
 export const CreateStudents = async (req, res) => {
 
-    const Student_data_Validation = StudentValidation.safeParse(req.body());
-
-    if (!Student_data_Validation) {
-      return res.status(401).json("Wrong Student details");
-    }
-
+  const { Registration_number,
+    Name,
+    Class,
+    Roll_No,
+    contact_number, } = req.body;
   try {
-   
-    const {
-      Registration_number,
-      Name,
-      Class,
-      Roll_No,
-      contact_number,
-    } = Student_data_Validation.data;
-
     const students = await prisma.students.create({
       data: {
         Registration_number,

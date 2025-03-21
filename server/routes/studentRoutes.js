@@ -7,10 +7,11 @@ import {
   GetStudentsRegNo,
   UpdateStudent,
 } from "../Controllers/StudentController.js";
+import { StudentValidation } from "../Middlewares/StudentMiddleware.js";
 
 const router = express.Router();
 
-router.post("/", CreateStudents);
+router.post("/",StudentValidation, CreateStudents);
 router.get("/", GetAllStudents);
 router.get('/:regNo', GetStudentsRegNo);
 router.put("/:regNo", UpdateStudent);
