@@ -1,3 +1,7 @@
+// Name:YASH GUPTA, Email:yashgtech00@gmail.com, Number:7879758136, School management Repository, Full Assignment to Codesore Technology
+
+
+
 import prisma from "../lib/db.js";
 
 export const CreateStudents = async (req, res) => {
@@ -78,7 +82,7 @@ export const GetStudentsRegNo = async (req, res) => {
   }
 };
 
-//update student
+//update student information
 export const UpdateStudent = async (req, res) => {
     const { regNo } = req.params;
     const { Name, Roll_No, Class, contact_number } = req.body;
@@ -129,8 +133,6 @@ export const UpdateStudent = async (req, res) => {
   }
 };
 
-
-
 //delete student (soft delete)
 export const DeleteStudent = async (req, res) => {
 
@@ -164,4 +166,7 @@ export const DeleteStudent = async (req, res) => {
       return res.status(500).json("internal server error");
     }
 };
+
+
+// Name:YASH GUPTA, Email:yashgtech00@gmail.com, Number:7879758136, School management Repository, Full Assignment to Codesore Technology
   

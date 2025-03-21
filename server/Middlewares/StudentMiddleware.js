@@ -1,3 +1,5 @@
+// Name:YASH GUPTA, Email:yashgtech00@gmail.com, Number:7879758136, School management Repository, Full Assignment to Codesore Technology
+
 import z from 'zod'
 
 export const StudentValidation = (req, res, next) => {
@@ -22,3 +24,6 @@ export const StudentValidation = (req, res, next) => {
     // if validation passes, call the next middleware
     next();
 }
+
+
+// Name:YASH GUPTA, Email:yashgtech00@gmail.com, Number:7879758136, School management Repository, Full Assignment to Codesore Technology

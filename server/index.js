@@ -1,4 +1,7 @@
-import 'dotenv/config';  // Standard practice for importing .env configuration  
+// Name:YASH GUPTA, Email:yashgtech00@gmail.com, Number:7879758136, School management Repository, Full Assignment to Codesore Technology
+
+
+import 'dotenv/config';  // Standard practice for importing .env configuration
 import express from 'express';   
 import cors from 'cors';   
 import studentRoutes from './routes/studentRoutes.js';   
@@ -19,3 +22,6 @@ app.use('/students', studentRoutes);
 app.listen(PORT, () => {   
     console.log(`Server is running on Port ${PORT}`);   
 });  
+
+
+// Name:YASH GUPTA, Email:yashgtech00@gmail.com, Number:7879758136, School management Repository, Full Assignment to Codesore Technology
